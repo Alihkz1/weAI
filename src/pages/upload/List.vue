@@ -15,38 +15,37 @@ const props = defineProps({
     }
 })
 
-const filtererItems = ref([...props.items])
+const displayingItems = ref([...props.items])
 
 watch(
     () => props.items,
     (newItems) => {
-        filtererItems.value = [...newItems]
+        displayingItems.value = [...newItems]
     },
     { immediate: true }
 )
 
-
 let tabs = ["All", ...ROOM_TYPES];
 const handleTabClick = (category) => {
-    if (category === 'All') filtererItems.value = [...props.items]
+    if (category === 'All') displayingItems.value = [...props.items]
     else
-        filtererItems.value = filtererItems.value.filter((tab) => tab.category === category)
+        displayingItems.value = displayingItems.value.filter((tab) => tab.category === category)
 }
 
 </script>
 
 <template>
-    <MyTabs :items="tabs" @itemClick="handleTabClick" />
+    <MyTabs v-if="items.length" :items="tabs" @itemClick="handleTabClick" />
     <ul class="w-full flex flex-col gap-8 mt-4">
-        <li v-for="value in filtererItems" class="grid grid-cols-2 w-full text-white">
+        <li v-for="file in displayingItems" class="grid grid-cols-2 w-full text-white">
             <!-- <li v-for="value in filtererItems" :key="value.title" class="grid grid-cols-2 w-full text-white"> -->
             <div class="flex gap-2">
                 <MyIcon :src="homeSmallIcon" />
-                <div class="flex flex-col gap-[5px]">
-                    <p>Image Item</p>
-                    <span class="text-xs text-stone-300">Size: 169KB</span>
-                    <span class="text-xs text-stone-300">Dimension: 1080*720</span>
-                    <span class="text-xs text-stone-300">Ratio: 16:9</span>
+                <div class="flex flex-col gap-[5px] text-nowrap">
+                    <p>{{ file.name }}</p>
+                    <span class="text-xs text-stone-300">Size: {{ file.size }}KB</span>
+                    <span class="text-xs text-stone-300">Dimension: {{ file.height }}*{{ file.width }}</span>
+                    <span class="text-xs text-stone-300">Ratio: {{ file.ratio }}</span>
                 </div>
             </div>
             <div class="flex items-center justify-end gap-2">

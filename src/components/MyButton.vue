@@ -31,7 +31,7 @@ const buttonClass: ComputedRef<string> = computed(() => {
 
 </script>
 <template>
-    <button :class="buttonClass" v-on:click="$emit('click')">
+    <button :class="buttonClass">
         <slot></slot>
     </button>
 </template>
