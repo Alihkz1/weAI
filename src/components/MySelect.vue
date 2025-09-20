@@ -1,36 +1,47 @@
 <script setup>
+import { ref } from 'vue'
+
 const props = defineProps({
-    label: {
-        type: String,
-        default: ''
-    },
-    options: {
-        type: Array,
-        default: () => []
-    },
-    modelValue: {
-        type: [String, Number],
-        default: ''
-    }
+    options: { type: Array, default: () => [] },
+    modelValue: [String, Number],
+    label: { type: String, default: '' }
 })
 
 const emit = defineEmits(['update:modelValue'])
+const open = ref(false)
+
+const selectOption = (option) => {
+    emit('update:modelValue', option)
+    open.value = false
+}
+
+const handleClickOutside = (event) => {
+    if (!event.target.closest('#select-wrapper')) open.value = false
+}
+
+window.addEventListener('click', handleClickOutside)
 </script>
 
 <template>
-    <div class="relative">
-        <label for="myInput" class="text-[#DCDCE3] text-xs absolute top-[6px] left-4 font-semibold">
+    <div class="custom-select relative w-full" id="select-wrapper">
+        <label class="text-[#DCDCE3] text-xs absolute top-[6px] left-4 font-semibold">
             {{ props.label }}
         </label>
 
-        <select id="myInput" name="myInput"
-            class="appearance-none outline-none font-semibold text-white h-14 w-full rounded-lg px-4 pt-4 border border-gray-600 focus:border-sky-600"
-            :value="props.modelValue" @change="emit('update:modelValue', $event.target.value)">
-            <option v-for="option in props.options" :key="option" :value="option">
-                {{ option }}
-            </option>
-        </select>
+        <!-- Select box -->
+        <div class="border border-gray-600 text-white rounded-lg px-4 pt-[10px] cursor-pointer h-14 flex items-center justify-between"
+            @click.stop="open = !open">
+            <span>{{ props.modelValue }}</span>
+            <img src="@/assets/svgs/chevron-down.svg" class="w-5 h-5" alt="">
+        </div>
 
-        <img class="pointer-events-none absolute right-4 top-4" src="@/assets/chevron-down.svg" alt="">
+        <!-- Dropdown options -->
+        <ul v-if="open"
+            class="absolute left-0 w-full bg-[#222225] mt-2 rounded-2xl overflow-auto z-20 border border-[#868695]">
+            <li v-for="option in props.options" :key="option" @click="selectOption(option)"
+                class="h-[40px] px-[10px] text-[#868695] flex items-center justify-center cursor-pointer font-semibold my-2 hover:text-sky-600">
+                {{ option }}
+            </li>
+        </ul>
     </div>
 </template>

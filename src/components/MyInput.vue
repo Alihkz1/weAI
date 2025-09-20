@@ -13,6 +13,6 @@ const props = defineProps({
         </label>
         <input type="text" name="myInput" :value="value"
             class="outline-none font-semibold text-white h-14 w-full rounded-lg px-4 pt-2 border border-gray-600 focus:border-sky-600">
-        <img class="absolute right-4 top-4" :src="iconSrc" alt="" v-on:click="$emit('iconClick')">
+        <img class="absolute right-4 top-4 z-20 cursor-pointer" :src="iconSrc" alt="" @click="$emit('iconClick')">
     </div>
 </template>

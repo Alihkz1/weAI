@@ -13,7 +13,7 @@ export function useIsMobile() {
 
   const isMobile = computed(() => width.value < 768);
 
-  const unmount = () => window.removeEventListener("resize");
+  const unmount = () => window.removeEventListener("resize", update);
 
   return { isMobile, unmount };
 }

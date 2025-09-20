@@ -1,7 +1,6 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import MyButton from '@/components/MyButton.vue';
-import './uploader-styles.scss';
 import { useIsMobile } from '@/composables/useIsMobile';
 
 const uploadInput = ref(null);
@@ -90,10 +89,17 @@ onBeforeUnmount(() => {
                 <span v-if="!isMobile">Drag or </span> <span>Select Your Photo</span>
             </h1>
             <MyButton @click="onUpload">
-                <img src="@/assets/upload.svg" alt="">
+                <img src="@/assets/svgs/upload.svg" alt="">
                 Upload
             </MyButton>
             <input class="hidden" ref="uploadInput" type="file" accept="image/*" />
         </div>
     </div>
 </template>
+
+<style>
+.drag-over {
+    background-color: #313188;
+    border: white dashed;
+}
+</style>

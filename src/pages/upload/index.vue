@@ -1,58 +1,69 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, ref, watch, watchEffect } from 'vue';
 import List from './List.vue';
 import Masking from './Masking.vue';
 import Preview from './Preview.vue';
 import Uploader from './Uploader.vue';
 import MyTransition from '@/components/MyTransition.vue';
 import Loading from '@/components/Loading.vue';
+import { useTabStore } from '../../../stores/tab';
+import { useFileStore } from '../../../stores/files';
 
-let tabIndex = ref(0);
 const toPreviewImage = ref(null)
 
 const handleNewUpload = (e) => {
     if (!e) return;
     toPreviewImage.value = e
-    tabIndex.value = 3
+    tabStore.set(3)
     setTimeout(() => {
-        tabIndex.value = 2
+        tabStore.set(2)
     }, 2000);
 }
 
-const onManualMasking = () => {
-    tabIndex.value = 1
+const handleManualMasking = () => {
+    tabStore.set(1)
 }
 
+const handlePreviewCompletion = () => {
+    tabStore.set(0)
+    toPreviewImage.value = null
+}
+
+const tabStore = useTabStore()
+const filesStore = useFileStore()
+
+const uploadedFiles = computed(() => [...filesStore.copy()])
 </script>
 
 <template>
-    <div class="w-full flex justify-center">
-        <MyTransition>
-            <div class="min-h-screen w-full md:w-[620px] flex flex-col items-center">
+    <div class="h-full w-full flex justify-center">
+        <div class="h-full w-full md:w-[620px] flex flex-col items-center">
+            <MyTransition>
 
                 <!-- uploader -->
-                <template v-if="tabIndex === 0" key="uploader">
+                <template v-if="tabStore.index === 0" key="uploader">
                     <div class="w-full flex flex-col gap-2 items-center">
                         <Uploader @new-upload="handleNewUpload" />
-                        <List :items="uploadedItems" />
+                        <List :items="uploadedFiles" />
                     </div>
                 </template>
 
                 <!-- masking -->
-                <template v-else-if="tabIndex === 1">
+                <template v-else-if="tabStore.index === 1">
                     <Masking key="masking" />
                 </template>
 
                 <!-- uploaded image preview -->
-                <template v-else-if="tabIndex === 2">
-                    <Preview key="preview" :image="toPreviewImage" @manual-masking="onManualMasking" />
+                <template v-else-if="tabStore.index === 2">
+                    <Preview key="preview" :image="toPreviewImage" @manual-masking="handleManualMasking"
+                        @previewCompletion="handlePreviewCompletion" />
                 </template>
 
-                <template v-else-if="tabIndex === 3">
+                <template v-else-if="tabStore.index === 3">
                     <Loading />
                 </template>
 
-            </div>
-        </MyTransition>
+            </MyTransition>
+        </div>
     </div>
 </template>

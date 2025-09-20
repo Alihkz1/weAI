@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full min-h-screen flex flex-col items-center justify-center gap-4">
+    <div class="mt-[40vh] w-full flex flex-col items-center justify-center gap-4">
         <div class="loader"></div>
         <p class="text-stone-300">Loading...</p>
     </div>

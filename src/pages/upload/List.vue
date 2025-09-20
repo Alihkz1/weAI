@@ -3,9 +3,9 @@ import MyIcon from '@/components/MyIcon.vue';
 import MyTabs from '@/components/MyTabs.vue';
 import { ROOM_TYPES } from '@/constants/room-type.const';
 import { ref, watch } from 'vue';
-import editIcon from '@/assets/edit.svg'
-import trashIcon from '@/assets/trash.svg'
-import homeSmallIcon from '@/assets/list-image-small.png'
+import editIcon from '@/assets/svgs/edit.svg'
+import trashIcon from '@/assets/svgs/trash.svg'
+import homeSmallIcon from '@/assets/images/list-image-small.png'
 
 const props = defineProps({
     items: {
