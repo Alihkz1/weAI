@@ -5,9 +5,12 @@ const props = defineProps({
     type: {
         default: "normal",
         required: false,
+    },
+    disabled: {
+        default: false,
     }
 })
-
+const disableButton = computed(() => props.disabled)
 
 const buttonClass: ComputedRef<string> = computed(() => {
     let buttonClass = `
@@ -31,7 +34,7 @@ const buttonClass: ComputedRef<string> = computed(() => {
 
 </script>
 <template>
-    <button :class="buttonClass">
+    <button class="disabled:cursor-not-allowed" :disabled="disableButton" :class="buttonClass">
         <slot></slot>
     </button>
 </template>

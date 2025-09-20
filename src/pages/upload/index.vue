@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch, watchEffect } from 'vue';
+import { computed, ref } from 'vue';
 import List from './List.vue';
 import Masking from './Masking.vue';
 import Preview from './Preview.vue';
@@ -30,9 +30,9 @@ const handlePreviewCompletion = () => {
 }
 
 const tabStore = useTabStore()
-const filesStore = useFileStore()
+const { copy } = useFileStore()
 
-const uploadedFiles = computed(() => [...filesStore.copy()])
+const uploadedFiles = computed(() => [...copy()])
 </script>
 
 <template>

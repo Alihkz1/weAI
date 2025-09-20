@@ -15,5 +15,11 @@ export const useFileStore = defineStore("file", {
     clear() {
       this.files = [];
     },
+    sameNameExists(imageName) {
+      return this.files.findIndex((f) => f.data.name === imageName) > -1;
+    },
+    sameFileExists(fileName) {
+      return this.files.findIndex((f) => f.name === fileName) > -1;
+    },
   },
 });

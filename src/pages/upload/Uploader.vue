@@ -2,15 +2,18 @@
 import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import MyButton from '@/components/MyButton.vue';
 import { useIsMobile } from '@/composables/useIsMobile';
+import { useFileStore } from '../../../stores/files';
 
-const uploadInput = ref(null);
 const dragZone = ref(null);
-
+const uploadInput = ref(null);
+const existImageAgain = ref(false)
 const newUploadedImage = ref(null)
+
+const { sameFileExists } = useFileStore()
+const { isMobile, unmount } = useIsMobile()
 
 const emit = defineEmits(["newUpload"])
 
-const { isMobile, unmount } = useIsMobile()
 onBeforeUnmount(unmount)
 
 watch(
@@ -32,7 +35,11 @@ function processFile(file) {
         const width = img.naturalWidth
         const height = img.naturalHeight
         const ratio = `${width}:${height}`
-        //todo: toast
+        if (sameFileExists(file.name)) {
+            existImageAgain.value = true
+            return
+        }
+        existImageAgain.value = false
         newUploadedImage.value =
         {
             name: file.name,
@@ -67,6 +74,7 @@ onMounted(() => {
     uploadInput.value.addEventListener('change', (e) => {
         processFile(e.target.files[0]);
     });
+    // todo
     dragZone.value.addEventListener('dragover', onDragOver);
     dragZone.value.addEventListener('dragleave', onDragLeave);
     dragZone.value.addEventListener('drop', onDrop);
@@ -80,8 +88,8 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="flex flex-col gap-6 w-full">
-        <h1 class="text-white text-2xl ps-1 font-semibold">Upload Photo</h1>
+    <div class="flex flex-col gap-3 w-full">
+        <h1 class="text-white text-2xl ps-1 font-semibold mb-3">Upload Photo</h1>
         <div class="bg-[#4D4DBD] h-[226px] rounded-2xl flex flex-col justify-center items-center gap-6" ref="dragZone">
             <!-- <div class="bg-bgBlue h-100 rounded-2xl flex flex-col justify-center items-center gap-6"> -->
             <!-- todo: tailwind config colors -->
@@ -94,6 +102,7 @@ onBeforeUnmount(() => {
             </MyButton>
             <input class="hidden" ref="uploadInput" type="file" accept="image/*" />
         </div>
+        <p v-if="existImageAgain" class="ps-2 text-red-300 text-sm">Image already exists!</p>
     </div>
 </template>
 
