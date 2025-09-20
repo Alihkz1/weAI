@@ -1,8 +1,8 @@
 <script setup>
 import MyIcon from '@/components/MyIcon.vue';
 import MyTabs from '@/components/MyTabs.vue';
-import { ROOM_TYPES } from '@/constants/room-type.const';
-import { computed, ref, watch } from 'vue';
+import { ROOM_TYPE_VALUES } from '@/constants/room-type.enum';
+import { ref, watch } from 'vue';
 import editIcon from '@/assets/svgs/edit.svg'
 import trashIcon from '@/assets/svgs/trash.svg'
 
@@ -15,7 +15,6 @@ const props = defineProps({
 })
 
 const displayingItems = ref([...props.items])
-let tabs = ["All", ...ROOM_TYPES];
 
 watch(
     () => props.items,
@@ -31,18 +30,22 @@ const fileDimension = (height, width) => {
 const handleTabClick = (category) => {
     if (category === 'All') displayingItems.value = [...props.items]
     else
-        displayingItems.value = displayingItems.value.filter((tab) => tab.category === category)
+        displayingItems.value = props.items.filter((tab) => tab.data.category === category)
+}
+
+const imageName = (fileName) => {
+    return fileName.length > 30 ? fileName.substring(0, 30) + ' ...' : fileName
 }
 
 </script>
 <template>
-    <MyTabs v-if="items.length" :items="tabs" @itemClick="handleTabClick" />
+    <MyTabs v-if="items.length" :items="ROOM_TYPE_VALUES" @itemClick="handleTabClick" />
     <ul class="w-full flex flex-col gap-8 mt-4">
         <li v-for="file in displayingItems" :key="file.data.name" class="grid grid-cols-2 w-full text-white">
             <div class="flex gap-2">
                 <MyIcon class="h-[90px] w-[90px] rounded-lg" :src="file.url" />
                 <div class="flex flex-col gap-[5px] text-nowrap">
-                    <p>{{ file.data.name }}</p>
+                    <p>{{ imageName(file.data.name) }}</p>
                     <span class="text-xs text-stone-300">Size: {{ file.size }}KB</span>
                     <span class="text-xs text-stone-300">Dimension: {{ fileDimension(file.height, file.width) }}</span>
                     <span class="text-xs text-stone-300">Ratio: {{ file.ratio }}</span>

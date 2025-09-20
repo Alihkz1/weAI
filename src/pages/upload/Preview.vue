@@ -2,7 +2,7 @@
 import MyIcon from '@/components/MyIcon.vue';
 import MyInput from '@/components/MyInput.vue';
 import MySelect from '@/components/MySelect.vue';
-import { ROOM_TYPES } from '@/constants/room-type.const';
+import { ROOM_TYPES } from '@/constants/room-type.enum';
 import { computed, reactive } from 'vue';
 import MyButton from '@/components/MyButton.vue';
 import Cancel from '@/components/Cancel.vue';
