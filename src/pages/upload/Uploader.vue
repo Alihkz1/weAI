@@ -1,18 +1,21 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watch, reactive } from 'vue';
 import MyButton from '@/components/MyButton.vue';
 import './uploader-styles.scss';
 
 const uploadInput = ref(null);
 const dragZone = ref(null);
 
-const images = ref([])
+const newUploadedImage = ref(null)
 
 const emit = defineEmits(["newUpload"])
 
-watch(() => images.value, () => {
-    emit('newUpload', [...images.value])
-}, { deep: true, immediate: true })
+watch(
+    newUploadedImage,
+    (newValue) => {
+        emit('newUpload', newValue)
+    },
+)
 
 const onUpload = () => {
     uploadInput.value.click();
@@ -26,17 +29,16 @@ function processFile(file) {
         const width = img.naturalWidth
         const height = img.naturalHeight
         const ratio = `${width}:${height}`
-        const sameNameIncludes = images.value.findIndex(pic => pic.name === file.name) > -1
         //todo: toast
-        if (!sameNameIncludes)
-            images.value.push({
-                name: file.name,
-                size: sizeKB,
-                width,
-                height,
-                ratio,
-                url: URL.createObjectURL(file),
-            })
+        newUploadedImage.value =
+        {
+            name: file.name,
+            size: sizeKB,
+            width,
+            height,
+            ratio,
+            url: URL.createObjectURL(file),
+        }
     }
     img.src = URL.createObjectURL(file)
 }
@@ -73,7 +75,6 @@ onBeforeUnmount(() => {
     dragZone.value.removeEventListener('drop', onDrop);
 });
 </script>
-
 
 <template>
     <div class="flex flex-col gap-6 w-full">

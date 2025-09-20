@@ -15,12 +15,12 @@ const buttonClass: ComputedRef<string> = computed(() => {
      flex items-center justify-center gap-2 
      cursor-pointer 
      transition-colors duration-300 
-     rounded-3xl 
+     rounded-full 
      py-2 px-8`
         .trim();
     switch (props.type) {
         case "transparent":
-            buttonClass += ' bg-transparent border border-indigo-500 hover:border-indigo-600';
+            buttonClass += ' bg-transparent !text-[#A3A3DE] border border-[#A3A3DE] hover:border-indigo-600';
         case "danger":
             buttonClass += ' bg-red-500';
         case "normal":
