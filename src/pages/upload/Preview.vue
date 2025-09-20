@@ -31,6 +31,6 @@ const form = reactive({
             <MyInput :icon-src="editSvg" :label="'Name'" v-model="form.name" :value="file.name" />
             <MySelect :label="'Category'" v-model="form.category" :options="categories" />
         </div>
-        <MyButton class="h-14 md:w-[171px] md:text-xs" :type="'transparent'">Manual Masking</MyButton>
+        <MyButton class="h-14 md:w-[171px] md:text-xs" :type="'transparent'" v-on:click="$emit('manual-masking')">Manual Masking</MyButton>
     </div>
 </template>

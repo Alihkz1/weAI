@@ -1,7 +1,8 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount, watch, reactive } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import MyButton from '@/components/MyButton.vue';
 import './uploader-styles.scss';
+import { useIsMobile } from '@/composables/useIsMobile';
 
 const uploadInput = ref(null);
 const dragZone = ref(null);
@@ -9,6 +10,9 @@ const dragZone = ref(null);
 const newUploadedImage = ref(null)
 
 const emit = defineEmits(["newUpload"])
+
+const { isMobile, unmount } = useIsMobile()
+onBeforeUnmount(unmount)
 
 watch(
     newUploadedImage,
@@ -83,7 +87,7 @@ onBeforeUnmount(() => {
             <!-- <div class="bg-bgBlue h-100 rounded-2xl flex flex-col justify-center items-center gap-6"> -->
             <!-- todo: tailwind config colors -->
             <h1 class="text-stone-200 font-bold text-xl">
-                Drag or Select Your Photo
+                <span v-if="!isMobile">Drag or </span> <span>Select Your Photo</span>
             </h1>
             <MyButton @click="onUpload">
                 <img src="@/assets/upload.svg" alt="">

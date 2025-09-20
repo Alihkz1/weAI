@@ -31,6 +31,6 @@ const emit = defineEmits(['update:modelValue'])
             </option>
         </select>
 
-        <img class="pointer-events-none absolute right-4 top-4" src="@/assets/chevron-down.svg" alt="dropdown">
+        <img class="pointer-events-none absolute right-4 top-4" src="@/assets/chevron-down.svg" alt="">
     </div>
 </template>
