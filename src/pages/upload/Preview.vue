@@ -12,7 +12,7 @@ import { useTabStore } from '../../../stores/tab';
 
 const categories = ROOM_TYPES;
 const { pushItem, sameNameExists } = useFileStore()
-const { set: setTabIndex } = useTabStore()
+const { setTabIndex } = useTabStore()
 const previewImageStore = usePreviewImage()
 
 const file = previewImageStore.getImageForPreview()

@@ -2,38 +2,33 @@
 import MyIcon from '@/components/MyIcon.vue';
 import MyTabs from '@/components/MyTabs.vue';
 import { ROOM_TYPE_VALUES } from '@/enums/room-type.enum';
-import { computed, watch } from 'vue';
-import editIcon from '@/assets/svgs/edit.svg'
-import trashIcon from '@/assets/svgs/trash.svg'
+import { computed, ref } from 'vue';
+import editIcon from '@/assets/svgs/edit.svg';
+import trashIcon from '@/assets/svgs/trash.svg';
 import { useFileStore } from '../../../stores/files';
 
-const { uploadedFilesInStore } = useFileStore()
-const displayingItems = computed(() => [...uploadedFilesInStore()])
+const { uploadedFilesInStore } = useFileStore();
 
-watch(
-    () => uploadedFilesInStore,
-    (newItems) => {
-        displayingItems.value = [...newItems]
-    },
-)
+const selectedCategory = ref("All");
 
-const fileDimension = (height, width) => {
-    return `${height}*${width}`
-}
+const displayingItems = computed(() => {
+    const files = uploadedFilesInStore();
+    if (selectedCategory.value === "All") return [...files];
+    return files.filter((tab) => tab.data.category === selectedCategory.value);
+});
 
 const handleTabClick = (category) => {
-    if (category === 'All') displayingItems.value = [...uploadedFilesInStore]
-    else
-        displayingItems.value = uploadedFilesInStore.filter((tab) => tab.data.category === category)
-}
+    selectedCategory.value = category;
+};
 
-const imageName = (fileName) => {
-    return fileName.length > 30 ? fileName.substring(0, 30) + ' ...' : fileName
-}
+const fileDimension = (height, width) => `${height}*${width}`;
 
+const imageName = (fileName) =>
+    fileName.length > 30 ? fileName.substring(0, 30) + " ..." : fileName;
 </script>
+
 <template>
-    <MyTabs v-if="uploadedFilesInStore.length" :items="ROOM_TYPE_VALUES" @itemClick="handleTabClick" />
+    <MyTabs v-if="uploadedFilesInStore().length" :items="ROOM_TYPE_VALUES" @itemClick="handleTabClick" />
     <ul class="w-full flex flex-col gap-8 mt-4">
         <li v-for="file in displayingItems" :key="file.data.name" class="grid grid-cols-2 w-full text-white">
             <div class="flex gap-2">
@@ -41,7 +36,9 @@ const imageName = (fileName) => {
                 <div class="flex flex-col gap-[5px] text-nowrap">
                     <p class="text-[15px] font-bold">{{ imageName(file.data.name) }}</p>
                     <span class="text-xs text-[#868695]">Size: {{ file.size }}KB</span>
-                    <span class="text-xs text-[#868695]">Dimension: {{ fileDimension(file.height, file.width) }}</span>
+                    <span class="text-xs text-[#868695]">
+                        Dimension: {{ fileDimension(file.height, file.width) }}
+                    </span>
                     <span class="text-xs text-[#868695]">Ratio: {{ file.ratio }}</span>
                 </div>
             </div>

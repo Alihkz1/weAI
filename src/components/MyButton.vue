@@ -1,40 +1,35 @@
 <script setup lang="ts">
-import { computed, ComputedRef } from 'vue';
+import { computed } from "vue";
 
-const props = defineProps({
-    type: {
-        default: "normal",
-        required: false,
-    },
-    disabled: {
-        default: false,
-    }
-})
-const disableButton = computed(() => props.disabled)
+const props = defineProps<{
+    type?: "normal" | "transparent" | "danger";
+    disabled?: boolean;
+}>();
 
-const buttonClass: ComputedRef<string> = computed(() => {
-    let buttonClass = `
-     font-semibold 
-     flex items-center justify-center gap-2 
-     cursor-pointer 
-     transition-colors duration-300 
-     rounded-full 
-     py-2 px-8`
-        .trim();
-    switch (props.type) {
-        case "transparent":
-            buttonClass += ' bg-transparent !text-[#A3A3DE] border border-[#A3A3DE] hover:border-indigo-600';
-        case "danger":
-            buttonClass += ' bg-red-500';
-        case "normal":
-            buttonClass += ' text-white bg-[#4D4DBD] hover:bg-indigo-600';
-    }
-    return buttonClass
-})
+const buttonType = props.type ?? "normal";
+const isDisabled = props.disabled ?? false;
 
+const variantClasses: Record<typeof buttonType, string> = {
+    normal: "text-white bg-[#4D4DBD] hover:bg-indigo-600",
+    transparent: "bg-transparent text-[#A3A3DE] border border-[#A3A3DE] hover:border-indigo-600",
+    danger: "bg-red-500 text-white hover:bg-red-600",
+};
+
+const buttonClass = computed(() => {
+    return `
+    font-semibold
+    flex items-center justify-center gap-2
+    transition-colors duration-300
+    rounded-full
+    py-2 px-8
+    ${isDisabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"}
+    ${variantClasses[buttonType]}
+  `.trim();
+});
 </script>
+
 <template>
-    <button class="disabled:cursor-not-allowed" :disabled="disableButton" :class="buttonClass">
+    <button :disabled="isDisabled" :class="buttonClass">
         <slot></slot>
     </button>
 </template>

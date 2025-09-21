@@ -9,7 +9,7 @@ export const useTabStore = defineStore("tab", {
     decrement() {
       this.index--;
     },
-    set(n) {
+    setTabIndex(n) {
       this.index = n;
     },
     tabIndex() {

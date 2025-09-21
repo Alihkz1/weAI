@@ -14,9 +14,9 @@ const uploadInput = ref(null);
 const errorMessage = ref(null)
 const newUploadedImage = ref(null)
 
+const { setTabIndex } = useTabStore()
 const { sameFileExists } = useFileStore()
 const { isMobile, unmount } = useIsMobile()
-const { set: setTabIndex } = useTabStore()
 const previewImageStore = usePreviewImage()
 
 const emit = defineEmits(["newUpload"])
