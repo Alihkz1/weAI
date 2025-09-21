@@ -1,16 +1,6 @@
-<script setup>
-import { onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-
-const router = useRouter()
-onMounted(() => {
-  router.replace("upload")
-})
-
-</script>
-
+<script setup></script>
 <template>
-  <div class="min-h-screen w-full bg-gray-950 p-4">
+  <div class="min-h-screen w-full bg-gray-950 p-4 overflow-auto">
     <router-view />
   </div>
 </template>
