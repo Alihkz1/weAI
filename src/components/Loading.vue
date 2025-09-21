@@ -1,7 +1,7 @@
 <template>
     <div class="mt-[40vh] w-full flex flex-col items-center justify-center gap-4">
         <div class="loader"></div>
-        <p class="text-stone-300">Loading...</p>
+        <p class="text-[#A8A8BA]">Loading...</p>
     </div>
 </template>
 

@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import MyTransition from './MyTransition.vue'
 
 const props = defineProps({
     options: { type: Array, default: () => [] },
@@ -32,16 +33,18 @@ window.addEventListener('click', handleClickOutside)
         <div class="border border-gray-600 text-white rounded-lg px-4 pt-[10px] cursor-pointer h-14 flex items-center justify-between"
             @click.stop="open = !open">
             <span>{{ props.modelValue }}</span>
-            <img src="@/assets/svgs/chevron-down.svg" class="w-5 h-5" alt="">
+            <img src="@/assets/svgs/chevron-down.svg" class="w-5 h-5" :class="[open ? 'rotate-x-180' : '']" alt="">
         </div>
 
         <!-- Dropdown options -->
-        <ul v-if="open"
-            class="absolute left-0 w-full bg-[#222225] mt-2 rounded-2xl overflow-auto z-20 border border-[#868695]">
-            <li v-for="option in props.options" :key="option" @click="selectOption(option)"
-                class="h-[40px] px-[10px] text-[#868695] flex items-center justify-center cursor-pointer font-semibold my-2 hover:text-sky-600">
-                {{ option }}
-            </li>
-        </ul>
+        <MyTransition>
+            <ul v-if="open"
+                class="absolute left-0 w-full bg-[#222225] mt-2 rounded-2xl overflow-auto z-20 border border-[#868695]">
+                <li v-for="option in props.options" :key="option" @click="selectOption(option)"
+                    class="h-[40px] px-[10px] text-[#868695] flex items-center justify-center cursor-pointer font-semibold my-2 hover:text-sky-600">
+                    {{ option }}
+                </li>
+            </ul>
+        </MyTransition>
     </div>
 </template>

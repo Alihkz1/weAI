@@ -10,22 +10,27 @@ const props = defineProps({
     modelValue: String,
 })
 
-const value = ref(props.modelValue)
-
-const valueIsValid = ref(null)
-
-watch((value), (newValue) => {
-    console.log(newValue);    
-    valueIsValid.value = !sameNameExists(newValue)
-})
-
-const canEdit = ref(false)
-
 const emit = defineEmits(['update:modelValue'])
 const { sameNameExists } = useFileStore()
 
-const handleInputChange = (e) => {
-    const newValue = e.target.value
+const value = ref(props.modelValue)
+const valueIsValid = ref(null)
+const canEdit = ref(false)
+
+if (sameNameExists(value.value)) {
+    canEdit.value = true
+    valueIsValid.value = false
+}
+
+watch(props.modelValue, (newValue) => {
+    value.value = newValue
+})
+
+watch(value, (newValue) => {
+    valueIsValid.value = !sameNameExists(newValue)
+})
+
+const handleInputChange = (newValue) => {
     value.value = newValue;
     valueIsValid.value = !sameNameExists(newValue)
     emit('update:modelValue', newValue)
@@ -47,8 +52,8 @@ const handleEdit = () => {
             {{ props.label }}
         </label>
 
-        <input type="text" name="myInput" :disabled="!canEdit" :value="value" @keydown="handleInputChange"
-            @blur="handleBlur"
+        <input type="text" name="myInput" :disabled="!canEdit" :value="value"
+            @input="(e) => handleInputChange(e.target.value)" @blur="handleBlur"
             class="outline-none font-semibold text-white h-14 w-full rounded-lg ps-4 pe-12 pt-2 border border-gray-600 focus:border-sky-600" />
 
         <!-- Edit icon when not editing -->

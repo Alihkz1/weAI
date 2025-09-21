@@ -27,7 +27,7 @@ const buttonClass: ComputedRef<string> = computed(() => {
         case "danger":
             buttonClass += ' bg-red-500';
         case "normal":
-            buttonClass += ' text-white bg-indigo-500 hover:bg-indigo-600';
+            buttonClass += ' text-white bg-[#4D4DBD] hover:bg-indigo-600';
     }
     return buttonClass
 })

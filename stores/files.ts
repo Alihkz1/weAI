@@ -9,7 +9,7 @@ export const useFileStore = defineStore("file", {
     popItem() {
       this.files.pop();
     },
-    copy() {
+    uploadedFilesInStore() {
       return [...this.files];
     },
     clear() {

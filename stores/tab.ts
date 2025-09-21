@@ -12,5 +12,8 @@ export const useTabStore = defineStore("tab", {
     set(n) {
       this.index = n;
     },
+    tabIndex() {
+      return this.index;
+    },
   },
 });
