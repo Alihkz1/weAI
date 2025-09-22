@@ -1,18 +1,18 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onBeforeUnmount, watch } from "vue";
 import MyButton from "@/components/MyButton.vue";
-import { useIsMobile } from "@/composables/useIsMobile";
 import MyTransition from "@/components/MyTransition.vue";
+import { useIsMobile } from "@/composables/useIsMobile";
 import { useTabStore } from "../../../stores/tab";
 import { usePreviewImage } from "../../../stores/preview-image";
 import List from "./List.vue";
 import { processFile } from "@/functions/process-file.function";
 import { TAB_INDEX } from "@/enums/tab-index.enum";
 
-const dragZone = ref(null);
-const errorText = ref(null);
-const uploadInput = ref(null);
-const uploadedImage = ref(null);
+const dragZone = ref < HTMLElement | null > (null);
+const errorText = ref < string | null > (null);
+const uploadInput = ref < HTMLInputElement | null > (null);
+const uploadedImage = ref < File | null > (null);
 
 const { setTabIndex } = useTabStore();
 const { isMobile, unmount } = useIsMobile();
@@ -23,6 +23,7 @@ const emit = defineEmits(["newUpload"]);
 onBeforeUnmount(unmount);
 
 const handleUpload = () => {
+  if (!uploadedImage.value) return;
   previewImageStore.setImageForPreview(uploadedImage.value);
   setTabIndex(TAB_INDEX.LOADING);
   setTimeout(() => {
@@ -33,40 +34,46 @@ const handleUpload = () => {
 watch(uploadedImage, handleUpload);
 
 const onUpload = () => {
-  uploadInput.value.click();
+  uploadInput.value?.click();
 };
 
-const onDragOver = (e) => {
+let dragCounter = 0;
+
+const onDragEnter = (e: DragEvent) => {
   e.preventDefault();
-  dragZone.value.classList.add("drag-over");
+  dragCounter++;
+  dragZone.value?.classList.add("drag-over");
 };
 
-const onDragLeave = (e) => {
+const onDragLeave = (e: DragEvent) => {
   e.preventDefault();
-  dragZone.value.classList.remove("drag-over");
-};
-
-const onDrop = async (e) => {
-  e.preventDefault();
-  const files = e.dataTransfer.files;
-  executeUploading(files)
-};
-
-const uploadInputChange = async (e) => {
-  const files = e.target.files
-  executeUploading(files)
-}
-
-const executeUploading = async (files) => {
-  if (files.length) {
-    const { newUploadedImage, errorMessage } = await processFile(files[0]);
-    if (errorMessage) errorText.value = errorMessage;
-    if (newUploadedImage)
-      uploadedImage.value = newUploadedImage;
+  dragCounter--;
+  if (dragCounter <= 0) {
+    dragZone.value?.classList.remove("drag-over");
+    dragCounter = 0;
   }
-  dragZone.value.classList.remove("drag-over");
-}
+};
 
+const onDrop = async (e: DragEvent) => {
+  e.preventDefault();
+  dragCounter = 0;
+  dragZone.value?.classList.remove("drag-over");
+
+  const files = e.dataTransfer?.files;
+  if (files && files.length) executeUploading(files);
+};
+
+const uploadInputChange = async (e: Event) => {
+  const target = e.target as HTMLInputElement;
+  const files = target.files;
+  if (files && files.length) executeUploading(files);
+};
+
+const executeUploading = async (files: FileList) => {
+  const { newUploadedImage, errorMessage } = await processFile(files[0]);
+  if (errorMessage) errorText.value = errorMessage;
+  if (newUploadedImage) uploadedImage.value = newUploadedImage;
+};
 </script>
 
 <template>
@@ -74,8 +81,9 @@ const executeUploading = async (files) => {
     <div class="flex flex-col gap-3 w-full">
       <h1 class="text-gray-100 text-2xl ps-1 font-bold mb-3">Upload Photo</h1>
       <div class="bg-[#4D4DBD66] h-[314px] md:h-[438px] rounded-2xl flex flex-col justify-center items-center gap-6"
-        ref="dragZone" @dragover.prevent="onDragOver" @dragleave.prevent="onDragLeave" @drop.prevent="onDrop">
-        <h1 class="text-xl text-[#CECEEE] font-bold text-xl">
+        ref="dragZone" @dragover.prevent @dragenter.prevent="onDragEnter" @dragleave.prevent="onDragLeave"
+        @drop.prevent="onDrop">
+        <h1 class="text-xl text-[#CECEEE] font-bold">
           <span v-if="!isMobile">Drag or </span> <span>Select Your Photo</span>
         </h1>
         <MyButton @click="onUpload">
@@ -85,9 +93,7 @@ const executeUploading = async (files) => {
         <input class="hidden" ref="uploadInput" type="file" accept="image/*" @change="uploadInputChange" />
       </div>
       <MyTransition>
-        <p v-if="errorText" class="ps-2 text-red-300 text-sm">
-          {{ errorText }}
-        </p>
+        <p v-if="errorText" class="ps-2 text-red-300 text-sm">{{ errorText }}</p>
       </MyTransition>
     </div>
     <List />
@@ -97,6 +103,6 @@ const executeUploading = async (files) => {
 <style>
 .drag-over {
   background-color: #313188;
-  border: white dashed;
+  border: 2px dashed white;
 }
 </style>

@@ -62,7 +62,7 @@ const handleEditFileConfirm = (model) => {
 <template>
     <MyTabs v-if="uploadedFilesInStore().length" :items="ROOM_TYPE_VALUES" @itemClick="handleTabClick" />
     <ul class="w-full flex flex-col gap-8 mt-4">
-        <li v-for="file in displayingItems" :key="file.data.name" class="grid grid-cols-2 w-full text-white">
+        <li v-for="(file, index) in displayingItems" :key="index" class="grid grid-cols-2 w-full text-white">
             <div class="flex gap-2">
                 <MyIcon class="h-[90px] w-[90px] rounded-lg" :src="file.url" />
                 <div class="flex flex-col gap-[5px] text-nowrap">
