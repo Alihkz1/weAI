@@ -49,6 +49,15 @@ const onDragLeave = (e) => {
 const onDrop = async (e) => {
   e.preventDefault();
   const files = e.dataTransfer.files;
+  executeUploading(files)
+};
+
+const uploadInputChange = async (e) => {
+  const files = e.target.files
+  executeUploading(files)
+}
+
+const executeUploading = async (files) => {
   if (files.length) {
     const { newUploadedImage, errorMessage } = await processFile(files[0]);
     if (errorMessage) errorText.value = errorMessage;
@@ -56,7 +65,8 @@ const onDrop = async (e) => {
       uploadedImage.value = newUploadedImage;
   }
   dragZone.value.classList.remove("drag-over");
-};
+}
+
 </script>
 
 <template>
@@ -72,8 +82,7 @@ const onDrop = async (e) => {
           <img src="@/assets/svgs/upload.svg" alt="" />
           Upload
         </MyButton>
-        <input class="hidden" ref="uploadInput" type="file" accept="image/*"
-          @change="(e) => processFile(e.target.files[0])" />
+        <input class="hidden" ref="uploadInput" type="file" accept="image/*" @change="uploadInputChange" />
       </div>
       <MyTransition>
         <p v-if="errorText" class="ps-2 text-red-300 text-sm">

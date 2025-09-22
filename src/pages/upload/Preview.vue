@@ -12,7 +12,6 @@ import { useTabStore } from '../../../stores/tab';
 import { TAB_INDEX } from '@/enums/tab-index.enum';
 
 const categories = [...ROOM_TYPE_VALUES].filter((_, i) => i)
-console.log(categories);
 const { pushItem, sameNameExists } = useFileStore()
 const { setTabIndex } = useTabStore()
 const previewImageStore = usePreviewImage()
