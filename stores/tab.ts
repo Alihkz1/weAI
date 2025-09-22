@@ -1,14 +1,9 @@
+import { TAB_INDEX } from "@/enums/tab-index.enum";
 import { defineStore } from "pinia";
 
 export const useTabStore = defineStore("tab", {
-  state: () => ({ index: 0 }),
+  state: () => ({ index: TAB_INDEX.UPLOADER }),
   actions: {
-    increment() {
-      this.index++;
-    },
-    decrement() {
-      this.index--;
-    },
     setTabIndex(n) {
       this.index = n;
     },
