@@ -2,14 +2,26 @@
 import MyIcon from '@/components/MyIcon.vue';
 import MyTabs from '@/components/MyTabs.vue';
 import { ROOM_TYPE_VALUES } from '@/enums/room-type.enum';
-import { computed, ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import editIcon from '@/assets/svgs/edit.svg';
 import trashIcon from '@/assets/svgs/trash.svg';
 import { useFileStore } from '../../../stores/files';
+import DeleteDrawer from './DeleteDrawer.vue';
+import EditDrawer from './EditDrawer.vue';
 
-const { uploadedFilesInStore } = useFileStore();
+const { uploadedFilesInStore, removeItemByName, editFileByName } = useFileStore();
 
 const selectedCategory = ref("All");
+const deleteDrawerIsOpen = ref(false);
+const editDrawerIsOpen = ref(false);
+
+const removingFileName = ref('');
+const editingFileName = ref('');
+
+const editForm = reactive({
+    name: '',
+    category: '',
+})
 
 const displayingItems = computed(() => {
     const files = uploadedFilesInStore();
@@ -25,6 +37,26 @@ const fileDimension = (height, width) => `${height}*${width}`;
 
 const imageName = (fileName) =>
     fileName.length > 30 ? fileName.substring(0, 30) + " ..." : fileName;
+
+const handleDeleteFile = (fileName) => {
+    removingFileName.value = fileName
+    deleteDrawerIsOpen.value = true
+}
+const handleDeleteFileConfirm = () => {
+    removeItemByName(removingFileName.value);
+}
+
+const handleEditFile = (file) => {
+    editingFileName.value = file.name;
+    editForm.name = file.data.name;
+    editForm.category = file.data.category;
+    editDrawerIsOpen.value = true;
+};
+
+const handleEditFileConfirm = (model) => {
+    editFileByName(editingFileName.value, model)
+};
+
 </script>
 
 <template>
@@ -43,9 +75,13 @@ const imageName = (fileName) =>
                 </div>
             </div>
             <div class="flex items-center justify-end gap-2">
-                <MyIcon class="h-6 w-6 rounded-lg cursor-pointer" :src="editIcon" />
-                <MyIcon class="h-6 w-6 rounded-lg cursor-pointer" :src="trashIcon" />
+                <MyIcon class="h-6 w-6 rounded-lg cursor-pointer" :src="editIcon" @click="() => handleEditFile(file)" />
+                <MyIcon class="h-6 w-6 rounded-lg cursor-pointer" :src="trashIcon"
+                    @click="() => handleDeleteFile(file.name)" />
             </div>
         </li>
     </ul>
+    <DeleteDrawer v-model="deleteDrawerIsOpen" class="h-63" @deleteClicked="handleDeleteFileConfirm" />
+    <EditDrawer v-model:openState="editDrawerIsOpen" v-model:modelValue="editForm" class="h-103"
+        @editClicked="handleEditFileConfirm" />
 </template>

@@ -10,13 +10,10 @@ const props = defineProps<{
     label?: string;
 }>();
 
-const emit = defineEmits<{
-    (e: "update:modelValue", value: string | number): void;
-}>();
+const emit = defineEmits(['update:modelValue']);
+const { isMobile } = useIsMobile()
 
 const open = ref(false);
-const wrapperId = "select-wrapper";
-const { isMobile } = useIsMobile()
 
 const selectOption = (option: string | number) => {
     emit("update:modelValue", option);
@@ -25,14 +22,11 @@ const selectOption = (option: string | number) => {
 
 const handleClickOutside = (event: MouseEvent) => {
     const target = event.target as HTMLElement;
-    if (!target.closest(`#${wrapperId}`)) {
+    if (!target.closest("#select-wrapper")) {
         open.value = false;
     }
 };
 
-const onOpen = () => {
-    open.value = true
-}
 const onClose = () => {
     open.value = false
 }
@@ -45,7 +39,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="custom-select relative w-full" :id="wrapperId">
+    <div class="custom-select relative w-full" id="select-wrapper">
         <label v-if="label" class="text-[#DCDCE3] text-xs absolute top-[6px] left-4 font-semibold">
             {{ label }}
         </label>
@@ -67,10 +61,10 @@ onBeforeUnmount(() => {
             </ul>
         </MyTransition>
 
-        <MyDrawer v-else class="h-100" v-model="open" @close="onClose" @open="onOpen">
+        <MyDrawer v-else class="h-100" v-model="open" @close="onClose">
             <div
                 class="px-4 w-full flex flex-col gap-3 absolute left-0 w-full bg-[#222225] mt-2 rounded-2xl overflow-auto z-20">
-               <h1 class="font-bold text-2xl text-white text-center">Category</h1>
+                <h1 class="font-bold text-2xl text-white text-center">Category</h1>
                 <ul>
                     <li v-for="option in options" :key="option" @click="selectOption(option)"
                         class="h-10 px-[10px] text-[#868695] flex items-center font-semibold my-2">

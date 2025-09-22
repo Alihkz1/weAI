@@ -1,8 +1,5 @@
 <script setup>
 import MyIcon from '@/components/MyIcon.vue';
-import MyInput from '@/components/MyInput.vue';
-import MySelect from '@/components/MySelect.vue';
-import { ROOM_TYPE_VALUES } from '@/enums/room-type.enum';
 import { computed, reactive } from 'vue';
 import MyButton from '@/components/MyButton.vue';
 import Cancel from '@/components/Cancel.vue';
@@ -10,8 +7,8 @@ import { useFileStore } from '../../../stores/files';
 import { usePreviewImage } from '../../../stores/preview-image';
 import { useTabStore } from '../../../stores/tab';
 import { TAB_INDEX } from '@/enums/tab-index.enum';
+import EditForm from './EditForm.vue';
 
-const categories = [...ROOM_TYPE_VALUES].filter((_, i) => i)
 const { pushItem, sameNameExists } = useFileStore()
 const { setTabIndex } = useTabStore()
 const previewImageStore = usePreviewImage()
@@ -55,11 +52,8 @@ const handleManualMasking = () => {
             <Cancel class="absolute right-3 top-6" @click="handleCancel" />
             <MyIcon class="h-[250px] md:h-[452px] rounded-xl my-4" :src="file.url" />
         </div>
-        <div class="grid md:grid-cols-2 gap-2">
-            <MyInput :label="'Name'" v-model="form.name" />
-            <MySelect :label="'Category'" v-model="form.category" :options="categories" />
-        </div>
-        <MyButton class="h-14 md:w-[171px] md:text-xs" :type="'transparent'" @click="handleManualMasking">Manual
+        <EditForm v-model="form" />
+        <MyButton class="h-14 md:w-43 md:text-xs" :type="'transparent'" @click="handleManualMasking">Manual
             Masking
         </MyButton>
         <div

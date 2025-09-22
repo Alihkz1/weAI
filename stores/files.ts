@@ -6,6 +6,13 @@ export const useFileStore = defineStore("file", {
     pushItem(newItem) {
       this.files.push(newItem);
     },
+    removeItemByName(fileName: string) {
+      this.files = this.files.filter((file) => file.name != fileName);
+    },
+    editFileByName(fileName: string, model) {
+      const file = this.files.find((f) => f.name === fileName);
+      file.data = model;
+    },
     popItem() {
       this.files.pop();
     },
