@@ -2,7 +2,7 @@
 import MyIcon from '@/components/MyIcon.vue';
 import MyInput from '@/components/MyInput.vue';
 import MySelect from '@/components/MySelect.vue';
-import { ROOM_TYPES } from '@/enums/room-type.enum';
+import { ROOM_TYPE_VALUES } from '@/enums/room-type.enum';
 import { computed, reactive } from 'vue';
 import MyButton from '@/components/MyButton.vue';
 import Cancel from '@/components/Cancel.vue';
@@ -11,7 +11,8 @@ import { usePreviewImage } from '../../../stores/preview-image';
 import { useTabStore } from '../../../stores/tab';
 import { TAB_INDEX } from '@/enums/tab-index.enum';
 
-const categories = ROOM_TYPES;
+const categories = [...ROOM_TYPE_VALUES].filter((_, i) => i)
+console.log(categories);
 const { pushItem, sameNameExists } = useFileStore()
 const { setTabIndex } = useTabStore()
 const previewImageStore = usePreviewImage()

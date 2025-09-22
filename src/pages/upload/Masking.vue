@@ -9,7 +9,7 @@ const back = () => {
 </script>
 
 <template>
-    <div class="w-full flex flex-col gap-4">
+    <div class="w-full flex flex-col justify-center items-center gap-4">
         <div class="text-red-300">
             Masking is not available yet!
         </div>

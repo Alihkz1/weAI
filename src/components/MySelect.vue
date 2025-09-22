@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { onBeforeUnmount, ref } from "vue";
 import MyTransition from "./MyTransition.vue";
+import { useIsMobile } from "@/composables/useIsMobile";
+import MyDrawer from "./MyDrawer.vue";
 
 const props = defineProps<{
     options: (string | number)[];
@@ -14,6 +16,7 @@ const emit = defineEmits<{
 
 const open = ref(false);
 const wrapperId = "select-wrapper";
+const { isMobile } = useIsMobile()
 
 const selectOption = (option: string | number) => {
     emit("update:modelValue", option);
@@ -27,10 +30,18 @@ const handleClickOutside = (event: MouseEvent) => {
     }
 };
 
+const onOpen = () => {
+    open.value = true
+}
+const onClose = () => {
+    open.value = false
+}
+
 window.addEventListener("click", handleClickOutside);
 onBeforeUnmount(() => {
     window.removeEventListener("click", handleClickOutside);
 });
+
 </script>
 
 <template>
@@ -39,7 +50,6 @@ onBeforeUnmount(() => {
             {{ label }}
         </label>
 
-        <!-- Select box -->
         <div class="border border-gray-600 text-white rounded-lg px-4 pt-[10px] cursor-pointer h-14 flex items-center justify-between"
             @click.stop="open = !open">
             <span>{{ modelValue }}</span>
@@ -47,15 +57,27 @@ onBeforeUnmount(() => {
                 :class="{ 'rotate-180': open }" alt="" />
         </div>
 
-        <!-- Dropdown options -->
-        <MyTransition>
+        <MyTransition v-if="!isMobile">
             <ul v-if="open"
                 class="absolute left-0 w-full bg-[#222225] mt-2 rounded-2xl overflow-auto z-20 border border-[#868695] max-h-60">
                 <li v-for="option in options" :key="option" @click="selectOption(option)"
-                    class="h-[40px] px-[10px] text-[#868695] flex items-center justify-center cursor-pointer font-semibold my-2 hover:text-sky-600">
+                    class="h-10 px-[10px] text-[#868695] flex items-center justify-center cursor-pointer font-semibold my-2 hover:text-sky-600">
                     {{ option }}
                 </li>
             </ul>
         </MyTransition>
+
+        <MyDrawer v-else class="h-100" v-model="open" @close="onClose" @open="onOpen">
+            <div
+                class="px-4 w-full flex flex-col gap-3 absolute left-0 w-full bg-[#222225] mt-2 rounded-2xl overflow-auto z-20">
+               <h1 class="font-bold text-2xl text-white text-center">Category</h1>
+                <ul>
+                    <li v-for="option in options" :key="option" @click="selectOption(option)"
+                        class="h-10 px-[10px] text-[#868695] flex items-center font-semibold my-2">
+                        {{ option }}
+                    </li>
+                </ul>
+            </div>
+        </MyDrawer>
     </div>
 </template>
