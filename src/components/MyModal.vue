@@ -30,4 +30,8 @@ const props = defineProps<{
     border-radius: 16px !important;
     color: #fff !important;
 }
+
+.ant-modal-close-x {
+    color: white !important;
+}
 </style>

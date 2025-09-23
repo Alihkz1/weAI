@@ -40,10 +40,10 @@ const handleEdit = () => {
             @input="(e) => (inputValue = (e.target as HTMLInputElement).value)" @blur="handleBlur"
             class="outline-none bg-transparent font-semibold text-white h-14 w-full rounded-lg ps-4 pe-12 pt-2 border border-gray-600 focus:border-sky-600" />
 
-        <img v-if="isValid && !canEdit" class="absolute right-4 top-4 z-20 cursor-pointer" :src="editIcon"
+        <img v-if="isValid && !canEdit" class="absolute right-4 top-4 cursor-pointer" :src="editIcon"
             @click="handleEdit" />
 
-        <img v-else-if="isValid === true" class="absolute right-4 top-4 z-20" :src="checkIcon" />
-        <img v-else-if="isValid === false" class="absolute right-4 top-4 z-20 h-6" :src="errorIcon" />
+        <img v-else-if="isValid === true" class="absolute right-4 top-4" :src="checkIcon" />
+        <img v-else-if="isValid === false" class="absolute right-4 top-4 h-6" :src="errorIcon" />
     </div>
 </template>

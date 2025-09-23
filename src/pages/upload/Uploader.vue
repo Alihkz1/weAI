@@ -8,6 +8,7 @@ import { usePreviewImage } from "../../../stores/preview-image";
 import List from "./List.vue";
 import { processFile } from "@/utilities/process-file.utility";
 import { TAB_INDEX } from "@/enums/tab-index.enum";
+import { useFileStore } from "../../../stores/files";
 
 const errorText = ref<string | null>(null);
 const uploadedImage = ref<File | null>(null);
@@ -15,6 +16,7 @@ const dragZone = ref<HTMLElement | null>(null);
 const uploadInput = ref<HTMLInputElement | null>(null);
 
 const { setTabIndex } = useTabStore();
+const { filesCount } = useFileStore();
 const { isMobile, unmount } = useIsMobile();
 const previewImageStore = usePreviewImage();
 
@@ -80,7 +82,8 @@ const executeUploading = async (files: FileList) => {
   <div class="w-full flex flex-col gap-2 items-center">
     <div class="flex flex-col gap-3 w-full">
       <h1 class="text-gray-100 text-2xl ps-1 font-bold mb-3">Upload Photo</h1>
-      <div class="bg-dragBgColor h-[314px] md:h-[438px] rounded-2xl flex flex-col justify-center items-center gap-6"
+      <div class="bg-dragBgColor h-80 rounded-2xl flex flex-col justify-center items-center gap-6"
+        :class="[filesCount() > 0 ? 'md:h-56' : 'md:h-109']"
         ref="dragZone" @dragover.prevent @dragenter.prevent="onDragEnter" @dragleave.prevent="onDragLeave"
         @drop.prevent="onDrop">
         <h1 class="text-xl text-dragTextColor font-bold">

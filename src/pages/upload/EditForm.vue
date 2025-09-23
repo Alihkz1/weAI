@@ -32,7 +32,7 @@ const editFormValid: ComputedRef<boolean> = computed(() => {
 </script>
 
 <template>
-    <div class="grid gap-2">
+    <div class="grid gap-2" :class="{ 'md:grid-cols-2': !props.isEditMode }">
         <MyInput label="Name" v-model:modelValue="form.name" v-model:isValid="editFormValid" />
         <MySelect label="Category" v-model="form.category" :options="categories" />
     </div>

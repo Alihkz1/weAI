@@ -39,12 +39,12 @@ const handleManualMasking = () => {
 </script>
 
 <template>
-    <div class="flex flex-col w-full gap-4 relative">
+    <div class="flex flex-col w-full gap-4 relative md:pb-12">
         <h1 class="text-2xl font-bold text-white">Mask Items</h1>
         <p class="text-descriptionColor text-sm">Select a object or brush on object you want to redesign</p>
         <div class="w-full flex justify-center relative">
             <Cancel class="absolute right-3 top-6" @click="handleCancel" />
-            <MyIcon class="h-[250px] md:h-[452px] rounded-xl my-4" :src="image.url" />
+            <MyIcon class="h-[250px] md:h-[352px] rounded-xl my-4" :src="image.url" />
         </div>
         <EditForm v-model="form" />
         <MyButton class="h-14 md:w-44 md:text-xs" type='transparent' @click="handleManualMasking">Manual
@@ -53,7 +53,7 @@ const handleManualMasking = () => {
         <div
             class="h-20 px-6 w-full bg-gray-900 flex items-center justify-center md:justify-around fixed bottom-0 left-0 right-0">
             <span></span>
-            <MyButton class="w-full md:w-[200px] h-12" @buttonClick="handleAdd">
+            <MyButton class="w-full md:w-48 h-12" @buttonClick="handleAdd">
                 Add
             </MyButton>
         </div>

@@ -33,7 +33,9 @@ export const useFileStore = defineStore("file", {
         file.data = model;
       }
     },
-
+    filesCount() {
+      return this.files.length;
+    },
     popItem() {
       this.files.pop();
     },
