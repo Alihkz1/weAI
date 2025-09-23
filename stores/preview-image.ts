@@ -1,15 +1,16 @@
 import { defineStore } from "pinia";
 
+interface PreviewImageState {
+  image: File | null;
+}
+
 export const usePreviewImage = defineStore("previewImage", {
-  state: () => ({ image: null }),
+  state: (): PreviewImageState => ({ image: null }),
   actions: {
-    setImageForPreview(imageFile) {
+    setImageForPreview(imageFile: File) {
       this.image = imageFile;
     },
-    getImageForPreview() {
-      return this.image;
-    },
-    reset() {
+    resetPreviewImage() {
       this.image = null;
     },
   },

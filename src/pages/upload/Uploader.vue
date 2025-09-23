@@ -6,13 +6,13 @@ import { useIsMobile } from "@/composables/useIsMobile";
 import { useTabStore } from "../../../stores/tab";
 import { usePreviewImage } from "../../../stores/preview-image";
 import List from "./List.vue";
-import { processFile } from "@/functions/process-file.function";
+import { processFile } from "@/utilities/process-file.utility";
 import { TAB_INDEX } from "@/enums/tab-index.enum";
 
-const dragZone = ref < HTMLElement | null > (null);
-const errorText = ref < string | null > (null);
-const uploadInput = ref < HTMLInputElement | null > (null);
-const uploadedImage = ref < File | null > (null);
+const errorText = ref<string | null>(null);
+const uploadedImage = ref<File | null>(null);
+const dragZone = ref<HTMLElement | null>(null);
+const uploadInput = ref<HTMLInputElement | null>(null);
 
 const { setTabIndex } = useTabStore();
 const { isMobile, unmount } = useIsMobile();
@@ -58,7 +58,6 @@ const onDrop = async (e: DragEvent) => {
   e.preventDefault();
   dragCounter = 0;
   dragZone.value?.classList.remove("drag-over");
-
   const files = e.dataTransfer?.files;
   if (files && files.length) executeUploading(files);
 };
@@ -74,6 +73,7 @@ const executeUploading = async (files: FileList) => {
   if (errorMessage) errorText.value = errorMessage;
   if (newUploadedImage) uploadedImage.value = newUploadedImage;
 };
+
 </script>
 
 <template>

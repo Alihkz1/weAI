@@ -11,7 +11,7 @@ const emit = defineEmits<{
 
 const selectedTab = ref(items[0]);
 
-const onItemClick = (item: string) => {
+const handleItemClick = (item: string) => {
     selectedTab.value = item;
     emit("itemClick", item);
 };
@@ -19,7 +19,7 @@ const onItemClick = (item: string) => {
 
 <template>
     <ul class="w-full overflow-x-auto flex gap-3 py-3">
-        <li v-for="item in items" :key="item" @click="onItemClick(item)" :class="[
+        <li v-for="item in items" :key="item" @click="handleItemClick(item)" :class="[
             'cursor-pointer transition-all duration-300 rounded-lg h-8 w-fit flex gap-1 items-center justify-center text-[#CBCBD6] text-nowrap text-xs font-semibold px-4',
             selectedTab === item
                 ? 'bg-[#7878CD33] border border-transparent'

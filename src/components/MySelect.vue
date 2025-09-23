@@ -27,7 +27,7 @@ const handleClickOutside = (event: MouseEvent) => {
     }
 };
 
-const onClose = () => {
+const handleClose = () => {
     open.value = false
 }
 
@@ -61,7 +61,7 @@ onBeforeUnmount(() => {
             </ul>
         </MyTransition>
 
-        <MyDrawer v-else class="h-100" v-model="open" @close="onClose">
+        <MyDrawer v-else class="h-100" v-model="open" @close="handleClose">
             <div
                 class="px-4 w-full flex flex-col gap-3 absolute left-0 w-full bg-[#222225] mt-2 rounded-2xl overflow-auto z-20">
                 <h1 class="font-bold text-2xl text-white text-center">Category</h1>

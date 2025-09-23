@@ -1,6 +1,6 @@
 <script setup>
 import MyIcon from '@/components/MyIcon.vue';
-import { computed, reactive } from 'vue';
+import { reactive } from 'vue';
 import MyButton from '@/components/MyButton.vue';
 import Cancel from '@/components/Cancel.vue';
 import { useFileStore } from '../../../stores/files';
@@ -9,33 +9,27 @@ import { useTabStore } from '../../../stores/tab';
 import { TAB_INDEX } from '@/enums/tab-index.enum';
 import EditForm from './EditForm.vue';
 
-const { pushItem, sameNameExists } = useFileStore()
+const { pushItem } = useFileStore()
 const { setTabIndex } = useTabStore()
-const previewImageStore = usePreviewImage()
-const file = previewImageStore.getImageForPreview()
+const { image, resetPreviewImage } = usePreviewImage()
 
 const form = reactive({
     name: 'Image Item',
     category: 'Living room',
 })
-
-const formIsInvalid = computed(() => {
-    return !form.name || !form.category || sameNameExists(form.name)
-})
-
 const handleCancel = () => {
     setTabIndex(TAB_INDEX.UPLOADER)
-    previewImageStore.reset()
+    resetPreviewImage()
 }
 
 const handleAdd = () => {
     const fileModel = {
-        ...file,
+        ...image,
         data: form
     }
     pushItem(fileModel)
     setTabIndex(TAB_INDEX.UPLOADER)
-    previewImageStore.reset()
+    resetPreviewImage()
 }
 
 const handleManualMasking = () => {
@@ -50,16 +44,16 @@ const handleManualMasking = () => {
         <p class="text-[#A8A8BA] text-sm">Select a object or brush on object you want to redesign</p>
         <div class="w-full flex justify-center relative">
             <Cancel class="absolute right-3 top-6" @click="handleCancel" />
-            <MyIcon class="h-[250px] md:h-[452px] rounded-xl my-4" :src="file.url" />
+            <MyIcon class="h-[250px] md:h-[452px] rounded-xl my-4" :src="image.url" />
         </div>
         <EditForm v-model="form" />
-        <MyButton class="h-14 md:w-43 md:text-xs" :type="'transparent'" @click="handleManualMasking">Manual
+        <MyButton class="h-14 md:w-43 md:text-xs" type='transparent' @click="handleManualMasking">Manual
             Masking
         </MyButton>
         <div
             class="h-20 px-6 w-full bg-gray-900 flex items-center justify-center md:justify-around fixed bottom-0 left-0 right-0">
             <span></span>
-            <MyButton :disabled="formIsInvalid" class="w-full md:w-[200px] h-12" @buttonClick="handleAdd">
+            <MyButton class="w-full md:w-[200px] h-12" @buttonClick="handleAdd">
                 Add
             </MyButton>
         </div>

@@ -8,13 +8,17 @@ import trashIcon from '@/assets/svgs/trash.svg';
 import { useFileStore } from '../../../stores/files';
 import DeleteDrawer from './DeleteDrawer.vue';
 import EditDrawer from './EditDrawer.vue';
+import EditModal from './EditModal.vue';
+import { useIsMobile } from '@/composables/useIsMobile';
+import DeleteModal from './DeleteModal.vue';
+import { FileDimension, FileSize, ImageName, FileRatio } from '@/utilities/file-display.utility';
 
 const { uploadedFilesInStore, removeItemByName, editFileByName } = useFileStore();
+const { isMobile } = useIsMobile()
 
 const selectedCategory = ref("All");
 const deleteDrawerIsOpen = ref(false);
 const editDrawerIsOpen = ref(false);
-
 const removingFileName = ref('');
 const editingFileName = ref('');
 
@@ -32,11 +36,6 @@ const displayingItems = computed(() => {
 const handleTabClick = (category) => {
     selectedCategory.value = category;
 };
-
-const fileDimension = (height, width) => `${height}*${width}`;
-
-const imageName = (fileName) =>
-    fileName.length > 30 ? fileName.substring(0, 30) + " ..." : fileName;
 
 const handleDeleteFile = (fileName) => {
     removingFileName.value = fileName
@@ -66,12 +65,12 @@ const handleEditFileConfirm = (model) => {
             <div class="flex gap-2">
                 <MyIcon class="h-[90px] w-[90px] rounded-lg" :src="file.url" />
                 <div class="flex flex-col gap-[5px] text-nowrap">
-                    <p class="text-[15px] font-bold">{{ imageName(file.data.name) }}</p>
-                    <span class="text-xs text-[#868695]">Size: {{ file.size }}KB</span>
+                    <p class="text-[15px] font-bold">{{ ImageName(file.data.name) }}</p>
+                    <span class="text-xs text-[#868695]">{{ FileSize(file.size) }}</span>
                     <span class="text-xs text-[#868695]">
-                        Dimension: {{ fileDimension(file.height, file.width) }}
+                        {{ FileDimension(file.height, file.width) }}
                     </span>
-                    <span class="text-xs text-[#868695]">Ratio: {{ file.ratio }}</span>
+                    <span class="text-xs text-[#868695]">{{ FileRatio(file.ratio) }}</span>
                 </div>
             </div>
             <div class="flex items-center justify-end gap-2">
@@ -81,7 +80,14 @@ const handleEditFileConfirm = (model) => {
             </div>
         </li>
     </ul>
-    <DeleteDrawer v-model="deleteDrawerIsOpen" class="h-63" @deleteClicked="handleDeleteFileConfirm" />
-    <EditDrawer v-model:openState="editDrawerIsOpen" v-model:modelValue="editForm" class="h-103"
-        @editClicked="handleEditFileConfirm" />
+
+    <!-- Delete File Action -->
+    <DeleteDrawer v-if="isMobile" class="h-63" v-model="deleteDrawerIsOpen" @submit="handleDeleteFileConfirm" />
+    <DeleteModal v-else class="w-94 h-35" v-model="deleteDrawerIsOpen" @submit="handleDeleteFileConfirm" />
+
+    <!-- Edit File Action -->
+    <EditDrawer v-if="isMobile" class="h-103" v-model:openState="editDrawerIsOpen" v-model:modelValue="editForm"
+        @submit="handleEditFileConfirm" />
+    <EditModal v-else class="w-94 h-75" v-model:openState="editDrawerIsOpen" v-model:modelValue="editForm"
+        @submit="handleEditFileConfirm" />
 </template>

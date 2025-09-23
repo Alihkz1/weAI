@@ -1,32 +1,57 @@
 import { defineStore } from "pinia";
 
+export interface FileData {
+  name: string;
+  category: string;
+}
+
+export interface UploadedFile extends File {
+  data: FileData;
+}
+
+interface FileState {
+  files: UploadedFile[];
+}
+
 export const useFileStore = defineStore("file", {
-  state: () => ({ files: [] }),
+  state: (): FileState => ({
+    files: [],
+  }),
+
   actions: {
-    pushItem(newItem) {
+    pushItem(newItem: UploadedFile) {
       this.files.push(newItem);
     },
+
     removeItemByName(fileName: string) {
-      this.files = this.files.filter((file) => file.name != fileName);
+      this.files = this.files.filter((file) => file.name !== fileName);
     },
-    editFileByName(fileName: string, model) {
+
+    editFileByName(fileName: string, model: FileData) {
       const file = this.files.find((f) => f.name === fileName);
-      file.data = model;
+      if (file) {
+        file.data = model;
+      }
     },
+
     popItem() {
       this.files.pop();
     },
-    uploadedFilesInStore() {
+
+    uploadedFilesInStore(): UploadedFile[] {
       return [...this.files];
     },
+
     clear() {
       this.files = [];
     },
-    sameNameExists(imageName) {
-      return this.files.findIndex((f) => f.data.name === imageName) > -1;
+
+    sameNameExists(imageName: string): boolean {
+      return this.files.some((f) => f.data.name === imageName);
     },
-    sameFileExists(fileName) {
-      return this.files.findIndex((f) => f.name === fileName) > -1;
+
+    sameFileExists(fileName: string): boolean {
+      return this.files.some((f) => f.name === fileName);
     },
   },
 });

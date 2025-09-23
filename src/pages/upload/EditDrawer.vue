@@ -4,7 +4,7 @@ import MyDrawer from '@/components/MyDrawer.vue';
 import { computed } from 'vue';
 import EditForm from './EditForm.vue';
 
-const emit = defineEmits(['update:modelValue', 'update:openState', 'editClicked'])
+const emit = defineEmits(['update:modelValue', 'update:openState', 'submit'])
 const props = defineProps<{
     modelValue: { name: string; category: string };
     openState: boolean;
@@ -20,24 +20,24 @@ const form = computed({
     set: (newValue) => emit('update:modelValue', newValue)
 })
 
-const onClose = () => {
+const handleClose = () => {
     drawerState.value = false
 }
 
-const onDelete = () => {
-    emit('editClicked', form)
-    onClose()
+const handleSave = () => {
+    emit('submit', form)
+    handleClose()
 }
 
 </script>
 
 <template>
-    <MyDrawer v-model="drawerState" @close="onClose">
+    <MyDrawer v-model="drawerState" @close="handleClose">
         <div class="w-full flex flex-col items-center gap-6 px-6">
             <h1 class="text-2xl font-bold text-white">Change Image Name</h1>
-            <EditForm class="w-full" v-model="form" />
-            <MyButton :disabled="true" class="w-full h-12" :type="'normal'" @click="onDelete">Save</MyButton>
-            <MyButton class="w-full h-12" :type="'onlyText'" @click="onClose">Cancel</MyButton>
+            <EditForm class="w-full" v-model="form" :isEditMode="true" />
+            <MyButton class="w-full h-12" type="normal" @click="handleSave">Save</MyButton>
+            <MyButton class="w-full h-12" type="onlyText" @click="handleClose">Cancel</MyButton>
         </div>
     </MyDrawer>
 </template>
