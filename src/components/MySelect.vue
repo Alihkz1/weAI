@@ -40,7 +40,7 @@ onBeforeUnmount(() => {
 
 <template>
     <div class="custom-select relative w-full" id="select-wrapper">
-        <label v-if="label" class="text-[#DCDCE3] text-xs absolute top-[6px] left-4 font-semibold">
+        <label v-if="label" class="text-labelColor text-xs absolute top-[6px] left-4 font-semibold">
             {{ label }}
         </label>
 
@@ -53,21 +53,21 @@ onBeforeUnmount(() => {
 
         <MyTransition v-if="!isMobile">
             <ul v-if="open"
-                class="absolute left-0 w-full bg-[#222225] mt-2 rounded-2xl overflow-auto z-20 border border-[#868695] max-h-60">
+                class="absolute left-0 w-full bg-bgDialog mt-2 rounded-2xl overflow-auto z-20 border border-optionTextColor max-h-60">
                 <li v-for="option in options" :key="option" @click="selectOption(option)"
-                    class="h-10 px-[10px] text-[#868695] flex items-center justify-center cursor-pointer font-semibold my-2 hover:text-sky-600">
+                    class="h-10 px-[10px] text-optionTextColor flex items-center justify-center cursor-pointer font-semibold my-2 hover:text-sky-600">
                     {{ option }}
                 </li>
             </ul>
         </MyTransition>
 
-        <MyDrawer v-else class="h-100" v-model="open" @close="handleClose">
+        <MyDrawer v-else class="h-96" v-model="open" @close="handleClose">
             <div
-                class="px-4 w-full flex flex-col gap-3 absolute left-0 w-full bg-[#222225] mt-2 rounded-2xl overflow-auto z-20">
+                class="px-4 w-full flex flex-col gap-3 absolute left-0 w-full bg-bgDialog mt-2 rounded-2xl overflow-auto z-20">
                 <h1 class="font-bold text-2xl text-white text-center">Category</h1>
                 <ul>
                     <li v-for="option in options" :key="option" @click="selectOption(option)"
-                        class="h-10 px-[10px] text-[#868695] flex items-center font-semibold my-2">
+                        class="h-10 px-[10px] text-optionTextColor flex items-center font-semibold my-2">
                         {{ option }}
                     </li>
                 </ul>

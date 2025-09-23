@@ -37,7 +37,7 @@ const handleCancel = () => {
         <EditForm v-model:modelValue="form" :isEditMode="true" />
         <div class="grid grid-cols-2 gap-1 my-6">
             <MyButton class="h-12" type="onlyText" @click="handleCancel">Cancel</MyButton>
-            <MyButton class="h-12" type="primary" @click="handleSave">Save</MyButton>
+            <MyButton class="h-12" @click="handleSave">Save</MyButton>
         </div>
     </MyModal>
 </template>

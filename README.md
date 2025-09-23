@@ -36,3 +36,9 @@ Run dev mode:
 ```sh
 npm run dev
 ```
+
+## 🎪 Online Demo
+
+```sh
+https://weai.liara.run
+```

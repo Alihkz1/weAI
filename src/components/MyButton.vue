@@ -10,10 +10,10 @@ const buttonType = computed(() => props.type ?? "normal");
 const isDisabled = computed(() => props.disabled ?? false);
 
 const variantClasses: Record<"normal" | "transparent" | "onlyText" | "danger", string> = {
-    normal: "text-white bg-[#4D4DBD]",
-    transparent: "bg-transparent text-[#A3A3DE] border border-[#A3A3DE]",
-    onlyText: 'bg-transparent text-[#A3A3DE]',
-    danger: "bg-[#BD4D4D] text-white",
+    normal: "text-white bg-buttonTextColor",
+    transparent: "bg-transparent text-buttonTransparentColor border border-buttonTransparentColor",
+    onlyText: 'bg-transparent text-buttonTransparentColor',
+    danger: "bg-buttonDangerColor text-white",
 };
 
 const buttonClass = computed(() => {

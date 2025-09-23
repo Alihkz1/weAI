@@ -66,11 +66,11 @@ const handleEditFileConfirm = (model) => {
                 <MyIcon class="h-[90px] w-[90px] rounded-lg" :src="file.url" />
                 <div class="flex flex-col gap-[5px] text-nowrap">
                     <p class="text-[15px] font-bold">{{ ImageName(file.data.name) }}</p>
-                    <span class="text-xs text-[#868695]">{{ FileSize(file.size) }}</span>
-                    <span class="text-xs text-[#868695]">
+                    <span class="text-xs text-optionTextColor">{{ FileSize(file.size) }}</span>
+                    <span class="text-xs text-optionTextColor">
                         {{ FileDimension(file.height, file.width) }}
                     </span>
-                    <span class="text-xs text-[#868695]">{{ FileRatio(file.ratio) }}</span>
+                    <span class="text-xs text-optionTextColor">{{ FileRatio(file.ratio) }}</span>
                 </div>
             </div>
             <div class="flex items-center justify-end gap-2">
@@ -86,7 +86,7 @@ const handleEditFileConfirm = (model) => {
     <DeleteModal v-else class="w-94 h-35" v-model="deleteDrawerIsOpen" @submit="handleDeleteFileConfirm" />
 
     <!-- Edit File Action -->
-    <EditDrawer v-if="isMobile" class="h-103" v-model:openState="editDrawerIsOpen" v-model:modelValue="editForm"
+    <EditDrawer v-if="isMobile" class="h-96" v-model:openState="editDrawerIsOpen" v-model:modelValue="editForm"
         @submit="handleEditFileConfirm" />
     <EditModal v-else class="w-94 h-75" v-model:openState="editDrawerIsOpen" v-model:modelValue="editForm"
         @submit="handleEditFileConfirm" />

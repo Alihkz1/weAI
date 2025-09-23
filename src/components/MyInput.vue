@@ -32,13 +32,13 @@ const handleEdit = () => {
 
 <template>
     <div class="relative">
-        <label v-if="label" for="myInput" class="text-[#DCDCE3] text-xs absolute top-[6px] left-4 font-semibold">
+        <label v-if="label" for="myInput" class="text-labelColor text-xs absolute top-[6px] left-4 font-semibold">
             {{ label }}
         </label>
 
         <input id="myInput" type="text" :disabled="!canEdit && isValid" :value="inputValue"
             @input="(e) => (inputValue = (e.target as HTMLInputElement).value)" @blur="handleBlur"
-            class="outline-none font-semibold text-white h-14 w-full rounded-lg ps-4 pe-12 pt-2 border border-gray-600 focus:border-sky-600" />
+            class="outline-none bg-transparent font-semibold text-white h-14 w-full rounded-lg ps-4 pe-12 pt-2 border border-gray-600 focus:border-sky-600" />
 
         <img v-if="isValid && !canEdit" class="absolute right-4 top-4 z-20 cursor-pointer" :src="editIcon"
             @click="handleEdit" />
